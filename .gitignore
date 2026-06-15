@@ -65,8 +65,6 @@ msbuild.err
 msbuild.wrn
 
 # Visual Studio
-#plugin.video.vrt.nu.pyproj
-#plugin.video.vrt.nu.sln
 .vs/
 .vscode
 
@@ -97,3 +95,11 @@ tests/userdata/cache/
 tests/userdata/credentials.json
 tests/userdata/search_history.json
 tests/userdata/tokens/
+
+# Rust build artifacts
+/target/
+
+# Built extension module (produced by maturin)
+/resources/lib/_vrtmax*.abi3.so
+/resources/lib/_vrtmax*.abi3.pyd
+/resources/lib/_vrtmax*.abi3.dylib

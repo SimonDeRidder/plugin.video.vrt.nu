@@ -4,6 +4,7 @@
 
 import os
 import unittest
+
 from addon import plugin
 from kodiutils import open_settings
 from streamservice import StreamService
@@ -16,6 +17,8 @@ xbmcplugin = __import__('xbmcplugin')
 xbmcvfs = __import__('xbmcvfs')
 
 addon = xbmcaddon.Addon()
+
+PLUGIN_BASE_URL = "plugin://plugin.video.vrt.nu"
 
 
 class TestSettings(unittest.TestCase):
@@ -43,8 +46,8 @@ class TestSettings(unittest.TestCase):
         """Test without menu caching"""
         addon.settings['usehttpcaching'] = True
         addon.settings['usemenucaching'] = False
-        plugin.run(['plugin://plugin.video.vrt.nu/recent', '0', ''])
-        plugin.run(['plugin://plugin.video.vrt.nu/recent', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/recent', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/recent', '0', ''])
 
     @staticmethod
     @unittest.skipUnless(addon.settings.get('username'), 'Skipping as VRT username is missing.')
@@ -53,33 +56,33 @@ class TestSettings(unittest.TestCase):
         """Test without http caching"""
         addon.settings['usehttpcaching'] = False
         addon.settings['usemenucaching'] = True
-        plugin.run(['plugin://plugin.video.vrt.nu/offline', '0', ''])
-        plugin.run(['plugin://plugin.video.vrt.nu/offline', '0', ''])
-        plugin.run(['plugin://plugin.video.vrt.nu/tvguide/date/today/canvas', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/offline', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/offline', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/tvguide/date/today/canvas', '0', ''])
 
     @staticmethod
     @unittest.skipUnless(addon.settings.get('username'), 'Skipping as VRT username is missing.')
     @unittest.skipUnless(addon.settings.get('password'), 'Skipping as VRT password is missing.')
     def test_favorites_disabled():
         """Test without favorites"""
-        plugin.run(['plugin://plugin.video.vrt.nu/', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/', '0', ''])
         addon.settings['usefavorites'] = False
         addon.settings['useresumepoints'] = True
-        plugin.run(['plugin://plugin.video.vrt.nu/', '0', ''])
-        plugin.run(['plugin://plugin.video.vrt.nu/favorites', '0', ''])
-        plugin.run(['plugin://plugin.video.vrt.nu/favorites/recent', '0', ''])
-        plugin.run(['plugin://plugin.video.vrt.nu/favorites/offline', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/favorites', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/favorites/recent', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/favorites/offline', '0', ''])
 
     @staticmethod
     @unittest.skipUnless(addon.settings.get('username'), 'Skipping as VRT username is missing.')
     @unittest.skipUnless(addon.settings.get('password'), 'Skipping as VRT password is missing.')
     def test_resumepoints_disabled():
         """Test without resumepoints"""
-        plugin.run(['plugin://plugin.video.vrt.nu/favorites', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/favorites', '0', ''])
         addon.settings['usefavorites'] = True
         addon.settings['useresumepoints'] = False
-        plugin.run(['plugin://plugin.video.vrt.nu/favorites', '0', ''])
-        plugin.run(['plugin://plugin.video.vrt.nu/resumepoints/continue', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/favorites', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/resumepoints/continue', '0', ''])
 
     @staticmethod
     def test_opensettings():
@@ -92,13 +95,13 @@ class TestSettings(unittest.TestCase):
     def test_youtube_disabled():
         """Test with showyoutube disabled"""
         addon.settings['showyoutube'] = False
-        plugin.run(['plugin://plugin.video.vrt.nu/channels/radio1', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/channels/radio1', '0', ''])
 
     @staticmethod
     def test_showfanart_disabled():
         """Test with showfanart disabled"""
         addon.settings['showfanart'] = False
-        plugin.run(['plugin://plugin.video.vrt.nu/categories', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/categories', '0', ''])
 
     @unittest.skipUnless(addon.settings.get('username'), 'Skipping as VRT username is missing.')
     @unittest.skipUnless(addon.settings.get('password'), 'Skipping as VRT password is missing.')

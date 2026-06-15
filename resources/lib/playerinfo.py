@@ -3,12 +3,23 @@
 """Implementation of PlayerInfo class"""
 
 from threading import Event, Thread
-from xbmc import getInfoLabel, Player, PlayList
 
 from api import get_next_info, get_resumepoint_data, set_resumepoint
 from data import CHANNELS
-from kodiutils import addon_id, get_setting_bool, has_addon, jsonrpc, kodi_version_major, log, log_error, notify, set_property, url_for
+from kodiutils import (
+    addon_id,
+    get_setting_bool,
+    has_addon,
+    jsonrpc,
+    kodi_version_major,
+    log,
+    log_error,
+    notify,
+    set_property,
+    url_for,
+)
 from utils import play_url_to_id
+from xbmc import Player, PlayList, getInfoLabel
 
 
 class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
@@ -221,8 +232,8 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         """
         playing_file = self.getPlayingFile()
         if any(param in playing_file for param in ('?t=', '&t=')):
-            from urllib.parse import parse_qs, urlsplit
             import re
+            from urllib.parse import parse_qs, urlsplit
             # Detect single start timestamp
             timestamp = parse_qs(urlsplit(playing_file).query).get('t')[0]
             rgx = re.compile(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$')

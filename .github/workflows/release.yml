@@ -13,15 +13,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9  # 1.94.1
       - name: Build zip files
         run: |
           sudo apt-get update
           sudo apt-get install libxml2-utils
-          make multizip release=1
-      - name: Get Matrix filename
-        id: get-matrix-filename
+          make build release=1
+      - name: Get Release filename
+        id: get-release-filename
         run: |
-          echo matrix-filename=$(cd ..;ls plugin.video.vrt.nu*+matrix.*.zip | head -1) >> $GITHUB_OUTPUT
+          echo release-filename=$(cd ..;ls plugin.video.vrt.nu.*.zip | head -1) >> $GITHUB_OUTPUT
       - name: Get body
         id: get-body
         run: |
@@ -41,15 +43,15 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            ../${{ steps.get-matrix-filename.outputs.matrix-filename }}
-      - name: Submit matrix version to official kodi repository
-        id: kodi-submit-matrix
-        uses: mediaminister/action-kodi-addon-submitter@master
-        with:
-          kodi-repository: repo-plugins
-          kodi-version: matrix
-          addon-id: plugin.video.vrt.nu
-        env:
-          GH_USERNAME: ${{secrets.GH_USERNAME}}
-          GH_TOKEN: ${{secrets.GH_TOKEN}}
-          EMAIL: ${{secrets.EMAIL}}
+            ../${{ steps.get-release-filename.outputs.release-filename }}
+      # - name: Submit version to official kodi repository
+      #   id: kodi-submit-release
+      #   uses: mediaminister/action-kodi-addon-submitter@master
+      #   with:
+      #     kodi-repository: repo-plugins
+      #     kodi-version: nexus
+      #     addon-id: plugin.video.vrt.nu
+      #   env:
+      #     GH_USERNAME: ${{secrets.GH_USERNAME}}
+      #     GH_TOKEN: ${{secrets.GH_TOKEN}}
+      #     EMAIL: ${{secrets.EMAIL}}

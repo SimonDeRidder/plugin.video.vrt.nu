@@ -2,12 +2,15 @@
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """This is the actual VRT MAX video plugin entry point"""
 
-import xbmcaddon
 import kodiutils
+import xbmcaddon
+from native_init import init_vrtmax
 
 kodiutils.ADDON = xbmcaddon.Addon()
+init_vrtmax()
 
 if __name__ == '__main__':
     from sys import argv
+
     from addon import run
     run(argv)

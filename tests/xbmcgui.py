@@ -7,6 +7,7 @@
 # pylint: disable=too-many-instance-attributes,unused-argument,useless-super-delegation
 
 import sys
+
 from xbmcextra import kodi_to_ansi
 
 

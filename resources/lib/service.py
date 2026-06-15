@@ -2,11 +2,12 @@
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """This is the actual VRT MAX service entry point"""
 
-from xbmc import Monitor
 from favorites import Favorites
 from kodiutils import container_refresh, get_setting_bool, has_credentials, log
+from native_init import push_settings
 from playerinfo import PlayerInfo
 from tokenresolver import TokenResolver
+from xbmc import Monitor
 
 
 class VrtMonitor(Monitor, object):  # pylint: disable=useless-object-inheritance
@@ -37,9 +38,11 @@ class VrtMonitor(Monitor, object):  # pylint: disable=useless-object-inheritance
         else:
             self._playerinfo = None
 
-    def onNotification(self, sender, method, data):  # pylint: disable=invalid-name
+    def onNotification(self, sender: str, method: str, data: str) -> None:  # pylint: disable=invalid-name
         """Handler for notifications"""
-        # log(2, '[Notification] sender={sender}, method={method}, data={data}', sender=sender, method=method, data=data)
+        if sender == 'xbmc' and method in ('Addons.OnEnabled', 'Addons.OnDisabled'):
+            push_settings()
+            return
 
         # Handle play_action events from upnextprovider
         if sender.startswith('upnextprovider') and method.endswith('plugin.video.vrt.nu_play_action'):
@@ -59,6 +62,7 @@ class VrtMonitor(Monitor, object):  # pylint: disable=useless-object-inheritance
         """Handler for changes to settings"""
 
         log(1, 'Settings changed')
+        push_settings()
         TokenResolver().refresh_login()
 
         # Init watching activity again when settings change
