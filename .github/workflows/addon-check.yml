@@ -32,4 +32,4 @@ jobs:
       run: awk '/export-ignore/ { print $1 }' .gitattributes | xargs rm -rf --
       working-directory: ${{ github.repository }}
     - name: Run kodi-addon-checker
-      run: $HOME/.local/bin/kodi-addon-checker --branch=matrix ${{ github.repository }}/
+      run: $HOME/.local/bin/kodi-addon-checker --branch=nexus ${{ github.repository }}/

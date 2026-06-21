@@ -3,6 +3,7 @@
 """Unit tests for language-related functionality"""
 
 import unittest
+
 from addon import plugin
 
 xbmc = __import__('xbmc')
@@ -10,6 +11,8 @@ xbmcaddon = __import__('xbmcaddon')
 xbmcgui = __import__('xbmcgui')
 xbmcplugin = __import__('xbmcplugin')
 xbmcvfs = __import__('xbmcvfs')
+
+PLUGIN_BASE_URL = "plugin://plugin.video.vrt.nu"
 
 
 class TestLanguage(unittest.TestCase):
@@ -23,25 +26,25 @@ class TestLanguage(unittest.TestCase):
     def test_dutch():
         """Test the principal add-on language"""
         xbmc.settings['locale.language'] = 'resource.language.nl_nl'
-        plugin.run(['plugin://plugin.video.vrt.nu/', '0', ''])
-        plugin.run(['plugin://plugin.video.vrt.nu/categories', '0', ''])
-        plugin.run(['plugin://plugin.video.vrt.nu/tvguide', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/categories', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/tvguide', '0', ''])
 
     @staticmethod
     def test_german():
         """Test an unsupported language"""
         xbmc.settings['locale.language'] = 'resource.language.de_de'
-        plugin.run(['plugin://plugin.video.vrt.nu/', '0', ''])
-        plugin.run(['plugin://plugin.video.vrt.nu/categories', '0', ''])
-        plugin.run(['plugin://plugin.video.vrt.nu/tvguide', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/categories', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/tvguide', '0', ''])
 
     @staticmethod
     def test_english():
         """Test the default Kodi language"""
         xbmc.settings['locale.language'] = 'resource.language.en_gb'
-        plugin.run(['plugin://plugin.video.vrt.nu/', '0', ''])
-        plugin.run(['plugin://plugin.video.vrt.nu/categories', '0', ''])
-        plugin.run(['plugin://plugin.video.vrt.nu/tvguide', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/categories', '0', ''])
+        plugin.run([f'{PLUGIN_BASE_URL}/tvguide', '0', ''])
 
 
 if __name__ == '__main__':

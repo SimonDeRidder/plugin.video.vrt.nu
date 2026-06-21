@@ -5,6 +5,7 @@
 
 import sys
 import unittest
+
 import addon
 
 xbmc = __import__('xbmc')
@@ -14,6 +15,8 @@ xbmcvfs = __import__('xbmcvfs')
 
 xbmc_addon = xbmcaddon.Addon()
 plugin = addon.plugin
+
+PLUGIN_BASE_URL = "plugin://plugin.video.vrt.nu"
 
 
 @unittest.skipIf(sys.version_info < (3, 6, 0), 'Skipping proxy tests on Python 3.5 and older')
@@ -34,33 +37,33 @@ class TestProxy(unittest.TestCase):
     # Delete tokens method: '/tokens/delete'
     def test_clear_cookies_route(self):
         """Test clearing cookies"""
-        plugin.run(['plugin://plugin.video.vrt.nu/tokens/delete', '0', ''])
-        self.assertEqual(plugin.url_for(addon.delete_tokens), 'plugin://plugin.video.vrt.nu/tokens/delete')
+        plugin.run([f'{PLUGIN_BASE_URL}/tokens/delete', '0', ''])
+        self.assertEqual(plugin.url_for(addon.delete_tokens), f'{PLUGIN_BASE_URL}/tokens/delete')
 
     # Delete cache method: '/cache/delete'
     def test_invalidate_caches_route(self):
         """Test invalidate caches"""
-        plugin.run(['plugin://plugin.video.vrt.nu/cache/delete', '0', ''])
-        self.assertEqual(plugin.url_for(addon.delete_cache), 'plugin://plugin.video.vrt.nu/cache/delete')
+        plugin.run([f'{PLUGIN_BASE_URL}/cache/delete', '0', ''])
+        self.assertEqual(plugin.url_for(addon.delete_cache), f'{PLUGIN_BASE_URL}/cache/delete')
 
     # Categories menu: '/categories'
     def test_categories_menu(self):
         """Test Categories menu"""
-        plugin.run(['plugin://plugin.video.vrt.nu/categories', '0', ''])
-        self.assertEqual(plugin.url_for(addon.categories), 'plugin://plugin.video.vrt.nu/categories')
+        plugin.run([f'{PLUGIN_BASE_URL}/categories', '0', ''])
+        self.assertEqual(plugin.url_for(addon.categories), f'{PLUGIN_BASE_URL}/categories')
 
     # Categories programs menu: '/categories/<category>'
     @unittest.skipUnless(xbmc_addon.settings.get('username'), 'Skipping as VRT username is missing.')
     @unittest.skipUnless(xbmc_addon.settings.get('password'), 'Skipping as VRT password is missing.')
     def test_categories_tvshow_menu(self):
         """Test Categories tvshow"""
-        plugin.run(['plugin://plugin.video.vrt.nu/categories/docu', '0', ''])
-        self.assertEqual(plugin.url_for(addon.categories, category='docu'), 'plugin://plugin.video.vrt.nu/categories/docu')
+        plugin.run([f'{PLUGIN_BASE_URL}/categories/docu', '0', ''])
+        self.assertEqual(plugin.url_for(addon.categories, category='docu'), f'{PLUGIN_BASE_URL}/categories/docu')
 
     # Favorites menu: '/favorites'
     @unittest.skipUnless(xbmc_addon.settings.get('username'), 'Skipping as VRT username is missing.')
     @unittest.skipUnless(xbmc_addon.settings.get('password'), 'Skipping as VRT password is missing.')
     def test_favorites(self):
         """Test Favorites menu"""
-        plugin.run(['plugin://plugin.video.vrt.nu/favorites/programs', '0', ''])
-        self.assertEqual(plugin.url_for(addon.favorites_programs), 'plugin://plugin.video.vrt.nu/favorites/programs')
+        plugin.run([f'{PLUGIN_BASE_URL}/favorites/programs', '0', ''])
+        self.assertEqual(plugin.url_for(addon.favorites_programs), f'{PLUGIN_BASE_URL}/favorites/programs')

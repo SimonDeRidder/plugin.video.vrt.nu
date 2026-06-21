@@ -2,15 +2,40 @@
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """Implements a VRTPlayer class"""
 
-from api import (get_categories, get_channels, get_continue_episodes, get_featured, get_programs, get_episodes, get_favorite_programs,
-                 get_recent_episodes, get_offline_programs, get_single_episode, get_latest_episode, get_youtube)
+from api import (
+    get_categories,
+    get_channels,
+    get_continue_episodes,
+    get_episodes,
+    get_favorite_programs,
+    get_featured,
+    get_latest_episode,
+    get_offline_programs,
+    get_programs,
+    get_recent_episodes,
+    get_single_episode,
+    get_youtube,
+)
 from data import CHANNELS
 from helperobjects import TitleItem
-from kodiutils import (delete_cached_thumbnail, end_of_directory, get_addon_info,
-                       get_setting, get_setting_bool, has_credentials,
-                       has_inputstream_adaptive, localize, kodi_version_major, log_error,
-                       ok_dialog, play, set_setting, show_listing, url_for,
-                       wait_for_resumepoints)
+from kodiutils import (
+    delete_cached_thumbnail,
+    end_of_directory,
+    get_addon_info,
+    get_setting,
+    get_setting_bool,
+    has_credentials,
+    has_inputstream_adaptive,
+    kodi_version_major,
+    localize,
+    log_error,
+    ok_dialog,
+    play,
+    set_setting,
+    show_listing,
+    url_for,
+    wait_for_resumepoints,
+)
 from utils import find_entry
 
 
@@ -243,6 +268,7 @@ class VRTPlayer:
     def play_episode_by_air_date(self, channel, start_date, end_date):
         """Play an episode of a program given the channel and the air date in iso format (2024-10-04T19:35:00)"""
         from datetime import datetime
+
         import dateutil.tz
 
         # Convert to UTC
@@ -297,8 +323,8 @@ class VRTPlayer:
     @staticmethod
     def play(video):
         """A wrapper for playing video items"""
-        from tokenresolver import TokenResolver
         from streamservice import StreamService
+        from tokenresolver import TokenResolver
         _tokenresolver = TokenResolver()
         _streamservice = StreamService(_tokenresolver)
         stream = _streamservice.get_stream(video)

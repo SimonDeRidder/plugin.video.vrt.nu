@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """All functionality that requires Kodi imports"""
-
 from contextlib import contextmanager
-from sys import version_info
 from socket import timeout
 from ssl import SSLError
-
+from sys import version_info
+from typing import overload
 from urllib.parse import quote, urlencode
 from urllib.request import HTTPErrorProcessor
 
@@ -130,12 +129,12 @@ def addon_path():
     return get_addon_info('path')
 
 
-def translate_path(path):
+def translate_path(path: str) -> str:
     """Converts a Kodi special:// path to the corresponding OS-specific path"""
     return translatePath(path)
 
 
-def addon_profile():
+def addon_profile() -> str:
     """Return add-on profile"""
     return translate_path(ADDON.getAddonInfo('profile'))
 
@@ -148,8 +147,8 @@ def url_for(name, *args, **kwargs):
 
 def show_listing(list_items, category=None, sort='unsorted', ascending=True, content=None, cache=None, selected=None):
     """Show a virtual directory in Kodi"""
-    from xbmcgui import ListItem
     from addon import plugin
+    from xbmcgui import ListItem
 
     set_property('container.url', 'plugin://' + addon_id() + plugin.path)
     xbmcplugin.setPluginFanart(handle=plugin.handle, image=addon_fanart())
@@ -272,8 +271,8 @@ def play(stream, video=None):
     """Create a virtual directory listing to play its only item"""
     from urllib.parse import unquote
 
-    from xbmcgui import ListItem
     from addon import plugin
+    from xbmcgui import ListItem
 
     play_item = ListItem(path=stream.stream_url)
     if video and hasattr(video, 'info_dict'):
@@ -395,7 +394,7 @@ def set_locale():
     """Load the proper locale for date strings, only once"""
     if hasattr(set_locale, 'cached'):
         return getattr(set_locale, 'cached')
-    from locale import Error, LC_ALL, setlocale
+    from locale import LC_ALL, Error, setlocale
     locale_lang = get_global_setting('locale.language').split('.')[-1]
     locale_lang = locale_lang[:-2] + locale_lang[-2:].upper()
     # NOTE: setlocale() only works if the platform supports the Kodi configured locale
@@ -482,7 +481,17 @@ def get_setting(key, default=None):
     return value
 
 
-def get_setting_bool(key, default=None):
+@overload
+def get_setting_bool(key: str, default: None = None) -> bool | None:
+    ...
+
+
+@overload
+def get_setting_bool(key: str, default: bool) -> bool:
+    ...
+
+
+def get_setting_bool(key: str, default: bool | None = None) -> bool | None:
     """Get an add-on setting as boolean"""
     try:
         return ADDON.getSettingBool(key)
@@ -495,7 +504,17 @@ def get_setting_bool(key, default=None):
         return default
 
 
-def get_setting_int(key, default=None):
+@overload
+def get_setting_int(key: str, default: None = None) -> int | None:
+    ...
+
+
+@overload
+def get_setting_int(key: str, default: int) -> int:
+    ...
+
+
+def get_setting_int(key: str, default: int | None = None) -> int | None:
     """Get an add-on setting as integer"""
     try:
         return ADDON.getSettingInt(key)
@@ -569,7 +588,7 @@ def get_advanced_setting(key, default=None):
     as_path = translate_path('special://masterprofile/advancedsettings.xml')
     if not exists(as_path):
         return default
-    from xml.etree.ElementTree import parse, ParseError
+    from xml.etree.ElementTree import ParseError, parse
     try:
         as_root = parse(as_path).getroot()
     except ParseError:
@@ -635,7 +654,7 @@ def get_playerid():
     return result.get('result', [{}])[0].get('playerid')
 
 
-def get_max_bandwidth():
+def get_max_bandwidth() -> int:
     """Get the max bandwidth based on Kodi and add-on settings"""
     vrtmax_max_bandwidth = int(get_setting('max_bandwidth', default='0'))
     global_max_bandwidth = int(get_global_setting('network.bandwidth'))
@@ -708,19 +727,19 @@ def get_cond_visibility(condition):
     return xbmc.getCondVisibility(condition)
 
 
-def has_inputstream_adaptive():
+def has_inputstream_adaptive() -> bool:
     """Whether InputStream Adaptive is installed and enabled in add-on settings"""
     return get_setting_bool('useinputstreamadaptive', default=True) and has_addon('inputstream.adaptive')
 
 
-def has_addon(name):
+def has_addon(name: str) -> bool:
     """Checks if add-on is installed and enabled"""
     if kodi_version_major() < 19:
         return xbmc.getCondVisibility('System.HasAddon(%s)' % name) == 1
     return xbmc.getCondVisibility('System.AddonIsEnabled(%s)' % name) == 1
 
 
-def has_credentials():
+def has_credentials() -> bool:
     """Whether the add-on has credentials filled in"""
     return bool(get_setting('username') and get_setting('password'))
 
@@ -730,17 +749,17 @@ def kodi_version():
     return xbmc.getInfoLabel('System.BuildVersion').split(' ')[0]
 
 
-def kodi_version_major():
+def kodi_version_major() -> int:
     """Returns major Kodi version as integer"""
     return int(kodi_version().split('.')[0])
 
 
-def can_play_drm():
+def can_play_drm() -> bool:
     """Whether this Kodi can do DRM using InputStream Adaptive"""
     return get_setting_bool('usedrm', default=True) and get_setting_bool('useinputstreamadaptive', default=True) and supports_drm()
 
 
-def supports_drm():
+def supports_drm() -> bool:
     """Whether this Kodi version supports DRM decryption using InputStream Adaptive"""
     return kodi_version_major() > 17
 
@@ -791,7 +810,7 @@ def get_cache_path(cache_file, cache_dir=DEFAULT_CACHE_DIR):
     return os.path.join(cache_dir, cache_file)
 
 
-def get_cache_dir(cache_dir=DEFAULT_CACHE_DIR):
+def get_cache_dir(cache_dir: str = DEFAULT_CACHE_DIR) -> str:
     """Create and return a specified cache directory"""
     import os
     cache_dir = os.path.join(addon_profile(), cache_dir, '')
@@ -952,7 +971,7 @@ def wait_for_resumepoints():
     return False
 
 
-def log(level=1, message='', **kwargs):
+def log(level: int = 1, message: str = '', **kwargs: object) -> None:
     """Log info messages to Kodi"""
     debug_logging = get_global_setting('debug.showloginfo')  # Returns a boolean
     max_log_level = get_setting_int('max_log_level', default=0)
@@ -1053,6 +1072,7 @@ def get_cache(cache_file, ttl=None, cache_dir=DEFAULT_CACHE_DIR):  # pylint: dis
         expiration_date = json.get('expirationDate', None)
         if expiration_date:
             from datetime import datetime
+
             import dateutil.parser
             import dateutil.tz
             now = datetime.now(dateutil.tz.tzlocal())
@@ -1116,7 +1136,7 @@ def open_url(url, data=None, headers=None, method=None, cookiejar=None, follow_r
     """Return a urllib http response"""
     from urllib.error import HTTPError, URLError
     from urllib.parse import unquote
-    from urllib.request import build_opener, HTTPCookieProcessor, ProxyHandler, Request
+    from urllib.request import HTTPCookieProcessor, ProxyHandler, Request, build_opener
 
     opener_args = []
     if not follow_redirects:
@@ -1228,6 +1248,7 @@ def get_url_json(url, cache=None, headers=None, data=None, fail=None, raise_erro
 def generate_expiration_date(hours=2):
     """Return ISO 8601 formatted expirationDate"""
     from datetime import datetime, timedelta
+
     import dateutil.tz
     return (datetime.now(dateutil.tz.UTC) + timedelta(hours=hours)).isoformat()
 

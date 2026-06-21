@@ -3,6 +3,7 @@
 """Unit tests for Kodi utilities"""
 
 import unittest
+
 import kodiutils
 
 xbmc = __import__('xbmc')

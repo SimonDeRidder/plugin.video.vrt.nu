@@ -4,8 +4,8 @@
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """Run any Kodi VRT MAX plugin:// URL on the commandline"""
 
-import sys
 import os
+import sys
 
 # Add current working directory to import paths
 CWD = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(os.path.realpath(__file__))), os.pardir, 'resources/lib'))

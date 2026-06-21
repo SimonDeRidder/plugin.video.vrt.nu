@@ -5,12 +5,33 @@
 from urllib.parse import quote, quote_plus, unquote
 
 from data import CHANNELS
-from helperobjects import TitleItem
-from kodiutils import (colour, delete_cached_thumbnail, get_cache, get_setting_bool, get_setting_int, get_url_json, has_addon, has_credentials,
-                       localize, localize_datelong, localize_from_data, log, log_error, update_cache, url_for)
-from utils import find_entry, parse_duration, reformat_image_url, shorten_link, url_to_program, youtube_to_plugin_url
 from graphql_data import EPISODE_TILE, PROGRAM_TILE
-
+from helperobjects import TitleItem
+from kodiutils import (
+    colour,
+    delete_cached_thumbnail,
+    get_cache,
+    get_setting_bool,
+    get_setting_int,
+    get_url_json,
+    has_addon,
+    has_credentials,
+    localize,
+    localize_datelong,
+    localize_from_data,
+    log,
+    log_error,
+    update_cache,
+    url_for,
+)
+from utils import (
+    find_entry,
+    parse_duration,
+    reformat_image_url,
+    shorten_link,
+    url_to_program,
+    youtube_to_plugin_url,
+)
 
 SCREENSHOT_URL = 'https://www.vrt.be/vrtnu-static/screenshots'
 GRAPHQL_URL = 'https://www.vrt.be/vrtnu-api/graphql/v1'
@@ -119,6 +140,7 @@ def format_label(program_title, episode_title, program_type, start_dt=None, favo
 def format_plot(plot, region, product_placement, mpaa, program_type=None, start_dt=None, stop_dt=None, offtime=None, permalink=None):
     """Format plot"""
     from datetime import datetime
+
     import dateutil.tz
 
     # Add additional metadata to plot
@@ -2616,10 +2638,11 @@ def convert_programs(item_list, destination, end_cursor='', use_favorites=False,
 def convert_episode(episode_data, destination=None):
     """Convert paginated episode item to TitleItem"""
     import re
-    import dateutil.parser
-    from datetime import datetime, timedelta
     from base64 import b64decode
+    from datetime import datetime, timedelta
     from json import loads
+
+    import dateutil.parser
     import dateutil.tz
 
     title_item = TitleItem(label=None, art_dict={}, info_dict={})
@@ -3350,6 +3373,7 @@ def get_seasons(program_name):
 def api_req(graphql_query, operation_name, variables, client='WEB'):
     """GraphQL API Request"""
     from json import dumps
+
     from tokenresolver import TokenResolver
     access_token = TokenResolver().get_token('vrtnu-site_profile_at')
     data_json = {}

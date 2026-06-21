@@ -2,13 +2,19 @@
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """Unit tests for VRTPlayer functionality"""
 
-from datetime import datetime
 import random
 import unittest
-
 from base64 import b64encode
+from datetime import datetime
+
 import dateutil.tz
-from api import get_categories, get_categories_data, get_episodes, get_featured, get_programs
+from api import (
+    get_categories,
+    get_categories_data,
+    get_episodes,
+    get_featured,
+    get_programs,
+)
 from vrtplayer import VRTPlayer
 
 xbmc = __import__('xbmc')
@@ -129,7 +135,7 @@ class TestVRTPlayer(unittest.TestCase):
 
     def test_play_unknown_airdate(self):
         """Test playing unknown airdate"""
-        self._vrtplayer.play_episode_by_air_date(channel='een', start_date='2100-01-01T23:59:58', end_date='2100-01-01T23:59:59')
+        self.assertRaises(ValueError, self._vrtplayer.play_episode_by_air_date, channel='een', start_date='2100-01-01T23:59:58', end_date='2100-01-01T23:59:59')
         self._vrtplayer.play_episode_by_air_date(channel='foo', start_date='2100-01-01T23:59:58', end_date='2100-01-01T23:59:59')
 
     @unittest.skipUnless(addon.settings.get('username'), 'Skipping as VRT username is missing.')

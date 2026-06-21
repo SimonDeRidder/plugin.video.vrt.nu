@@ -10,3 +10,5 @@ setuptools >= 41
 tox
 #typing-extensions == 3.7.4.1; python_version != '2.7'
 xmlschema == 1.0.18; python_version == '2.7'
+# Build-time
+maturin>=1.13,<2.0

@@ -20,8 +20,13 @@ This Kodi add-on can be used to watch all video content from VRT MAX.
 
 > Note: The VRT MAX add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.
 
+> Note 2: Only Linux x86_64 fully supported for now.
+
 ## Installing
+
 In Kodi, simply search the add-ons for `VRT` and install the VRT MAX video add-on.
+For a manual install, download a pre-built zip-file from the Releases page and install it using "install from zip file" within Kodi.
+You can also create your own zip file, see [Development](#development).
 
 > Note: Detailed information about installing and updating the VRT MAX add-on is available on [our Wiki](https://github.com/add-ons/plugin.video.vrt.nu/wiki).
 
@@ -56,7 +61,21 @@ You can report issues at [our GitHub issues page](https://github.com/add-ons/plu
   </tr>
 </table>
 
+## Development
+
+- create a virtual environment with Python>=3.11 and the packages in requirements.txt
+- make sure rust toolkit (>=1.85) is installed
+- make sure unzip is installed
+- make sure maturin is installed in the current python env.
+- To create a development build, run `make dev`
+- To create a release build, run `make build`
+- Currently supporting Kodi 20 (Nexus) and Kodi 21 (Omega) via abi3-py311.
+
 ## Releases
+
+### v2.6.0
+- First release of Rust-converted version
+
 ### v2.5.50 (2026-01-20)
 - Fix season menu listings (@mediaminister)
 

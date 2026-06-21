@@ -4,14 +4,23 @@
 """Implements a VRT MAX TV guide"""
 
 from datetime import datetime, timedelta
+
 import dateutil.parser
 import dateutil.tz
-
 from api import get_epg_episodes, get_epg_list
 from data import CHANNELS, RELATIVE_DATES
 from helperobjects import TitleItem
-from kodiutils import (colour, get_cached_url_json, has_addon, localize,
-                       localize_datelong, show_listing, themecolour, ttl, url_for)
+from kodiutils import (
+    colour,
+    get_cached_url_json,
+    has_addon,
+    localize,
+    localize_datelong,
+    show_listing,
+    themecolour,
+    ttl,
+    url_for,
+)
 from utils import find_entry, parse_duration
 
 
